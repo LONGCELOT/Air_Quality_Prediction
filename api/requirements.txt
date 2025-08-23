@@ -17,11 +17,5 @@ joblib==1.3.2
 pandas==2.1.4
 numpy==1.25.2
 
-# CORS middleware
-python-cors==1.7.0
-
-# Optional: TensorFlow (commented out due to compatibility issues)
-# tensorflow==2.15.0
-
 # Development tools (optional)
 python-dotenv==1.0.0

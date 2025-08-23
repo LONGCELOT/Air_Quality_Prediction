@@ -1,0 +1,50 @@
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Original development folder (we have the optimized 'api' folder instead)
+aqi_prediction_api/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Flutter/Dart specific (for App_AQI folder)
+App_AQI/.dart_tool/
+App_AQI/build/
+App_AQI/.flutter-plugins
+App_AQI/.flutter-plugins-dependencies
+App_AQI/.packages
+App_AQI/.pub-cache/
+App_AQI/.pub/
+
+# Android specific
+App_AQI/android/.gradle/
+App_AQI/android/.kotlin/
+App_AQI/android/local.properties
+App_AQI/android/gradle/
+App_AQI/android/gradlew
+App_AQI/android/gradlew.bat
+
+# iOS specific  
+App_AQI/ios/Pods/
+App_AQI/ios/.symlinks/
+App_AQI/ios/Flutter/Flutter.framework
+App_AQI/ios/Flutter/Flutter.podspec

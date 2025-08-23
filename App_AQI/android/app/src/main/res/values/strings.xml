@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AQI Prediction</string>
+    <string name="aqi_widget_description">Display current air quality index and pollutant levels</string>
+    <string name="aqi_prediction_widget_description">Show AQI predictions for 8h, 12h, and 24h ahead</string>
+</resources>

@@ -3,7 +3,7 @@ fastapi==0.104.1          # Modern, fast web framework for building APIs with Py
 uvicorn==0.24.0           # Lightning-fast ASGI server for running FastAPI applications
 
 # Machine Learning Libraries
-scikit-learn==1.3.2       # Machine learning library for Linear Regression and Random Forest
+scikit-learn==1.5.1       # Machine learning library for Linear Regression and Random Forest
 xgboost==2.0.2            # Gradient boosting framework for XGBoost model
 tensorflow==2.15.0        # Deep learning framework for LSTM neural networks
 

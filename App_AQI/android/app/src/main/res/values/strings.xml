@@ -3,4 +3,6 @@
     <string name="app_name">AQI Prediction</string>
     <string name="aqi_widget_description">Display current air quality index and pollutant levels</string>
     <string name="aqi_prediction_widget_description">Show AQI predictions for 8h, 12h, and 24h ahead</string>
+    <string name="enhanced_widget_description">Weather-style air quality widget with current AQI and forecasts</string>
+    <string name="widget_title">AQI Enhanced</string>
 </resources>

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/aqi_provider.dart';
-import '../widgets/current_aqi_card.dart';
-import '../widgets/prediction_card.dart';
+import '../widgets/enhanced_aqi_card.dart';
 import '../widgets/aqi_chart_card.dart';
 import '../services/home_widget_service.dart';
 import '../utils/constants.dart';
@@ -39,15 +38,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _updateWidgets() async {
     final provider = Provider.of<AQIProvider>(context, listen: false);
     
-    // Save location for background updates
-    if (provider.currentPosition != null) {
+    // Save Brasília location for background updates (where our data comes from)
+    if (provider.currentAQI != null) {
       await HomeWidgetService.saveLastLocation(
-        provider.currentPosition!.latitude,
-        provider.currentPosition!.longitude,
+        -15.7797, // Brasília latitude
+        -47.9297, // Brasília longitude
       );
     }
     
-    // Update widgets
+    // Update enhanced widget (weather-like style)
+    await HomeWidgetService.updateEnhancedAQIWidget(provider.currentAQI, provider.predictions);
+    
+    // Update individual widgets for backward compatibility
     await HomeWidgetService.updateCurrentAQIWidget(provider.currentAQI);
     await HomeWidgetService.updatePredictionWidget(provider.predictions);
   }
@@ -153,13 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   
                   const SizedBox(height: AppDimensions.paddingMedium),
                   
-                  // Current AQI Card
-                  const CurrentAQICard(),
-                  
-                  const SizedBox(height: AppDimensions.paddingMedium),
-                  
-                  // Prediction Card
-                  const PredictionCard(),
+                  // Enhanced AQI Card (combines current AQI and predictions)
+                  const EnhancedAQICard(),
                   
                   const SizedBox(height: AppDimensions.paddingMedium),
                   
@@ -239,32 +236,71 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         children: [
-          Icon(
-            Icons.location_on,
-            color: AppColors.primary,
-            size: AppDimensions.iconSizeMedium,
-          ),
-          const SizedBox(width: AppDimensions.paddingSmall),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Current Location',
-                  style: AppTextStyles.body2,
+          // Data source location
+          Row(
+            children: [
+              Icon(
+                Icons.analytics,
+                color: AppColors.primary,
+                size: AppDimensions.iconSizeMedium,
+              ),
+              const SizedBox(width: AppDimensions.paddingSmall),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Air Quality Data for',
+                      style: AppTextStyles.body2,
+                    ),
+                    Text(
+                      'Brasília, Brazil',
+                      style: AppTextStyles.body1.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Lat: ${provider.currentPosition!.latitude.toStringAsFixed(4)}, '
-                  'Lng: ${provider.currentPosition!.longitude.toStringAsFixed(4)}',
-                  style: AppTextStyles.body1.copyWith(
-                    fontWeight: FontWeight.w500,
+              ),
+            ],
+          ),
+          if (provider.currentPosition != null) ...[
+            const SizedBox(height: AppDimensions.paddingSmall),
+            const Divider(),
+            const SizedBox(height: AppDimensions.paddingSmall),
+            // User's detected location
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on,
+                  color: AppColors.textSecondary,
+                  size: AppDimensions.iconSizeSmall,
+                ),
+                const SizedBox(width: AppDimensions.paddingSmall),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Your Location Detected',
+                        style: AppTextStyles.caption,
+                      ),
+                      Text(
+                        'Lat: ${provider.currentPosition!.latitude.toStringAsFixed(4)}, '
+                        'Lng: ${provider.currentPosition!.longitude.toStringAsFixed(4)}',
+                        style: AppTextStyles.caption.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
+          ],
         ],
       ),
     );

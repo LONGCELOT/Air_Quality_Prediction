@@ -45,8 +45,9 @@ class AQIProvider with ChangeNotifier {
     _error = null;
 
     try {
-      final latitude = _currentPosition?.latitude;
-      final longitude = _currentPosition?.longitude;
+      // Always use Brasilia coordinates for API calls, ignore user location
+      const latitude = -15.7797;  // Brasilia latitude
+      const longitude = -47.9297; // Brasilia longitude
 
       // Fetch current AQI data and predictions in parallel
       final futures = await Future.wait([
@@ -72,8 +73,9 @@ class AQIProvider with ChangeNotifier {
   // Fetch only current AQI
   Future<void> fetchCurrentAQI() async {
     try {
-      final latitude = _currentPosition?.latitude;
-      final longitude = _currentPosition?.longitude;
+      // Always use Brasilia coordinates
+      const latitude = -15.7797;
+      const longitude = -47.9297;
       
       _currentAQI = await AQIApiService.getCurrentAQI(
         latitude: latitude,
@@ -89,8 +91,9 @@ class AQIProvider with ChangeNotifier {
   // Fetch only predictions
   Future<void> fetchPredictions() async {
     try {
-      final latitude = _currentPosition?.latitude;
-      final longitude = _currentPosition?.longitude;
+      // Always use Brasilia coordinates
+      const latitude = -15.7797;
+      const longitude = -47.9297;
       
       _predictions = await AQIApiService.getPrediction(
         latitude: latitude,

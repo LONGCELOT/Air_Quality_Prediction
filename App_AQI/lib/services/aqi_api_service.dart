@@ -4,14 +4,20 @@ import 'package:flutter/foundation.dart';
 import '../models/aqi_data.dart';
 
 class AQIApiService {
-  // Platform-specific base URLs
+  // Platform-specific base URLs for local development
   static String get baseUrl {
     if (kIsWeb) {
-      // For web platforms (Chrome, Firefox, etc.)
+      // For web platforms - direct localhost access
       return 'http://localhost:8000';
-    } else {
-      // For mobile platforms (Android emulator needs 10.0.2.2, real device needs actual IP)
+    } else if (kDebugMode) {
+      // For mobile platforms in debug mode (simulator/emulator)
+      // Android emulator uses 10.0.2.2 to access host machine's localhost
+      // iOS simulator can use localhost directly
       return 'http://10.0.2.2:8000';
+    } else {
+      // For release builds, use your actual local IP
+      // Replace with your computer's IP address on local network
+      return 'http://192.168.1.XXX:8000'; // Update XXX with your IP
     }
   }
   
@@ -20,6 +26,31 @@ class AQIApiService {
   // Default coordinates (Brasília, Brazil as fallback)
   static const double defaultLatitude = -15.7797;
   static const double defaultLongitude = -47.9297;
+
+  // Test API connectivity
+  static Future<bool> testConnection() async {
+    try {
+      final url = Uri.parse('$baseUrl/health');
+      print('Testing connection to: $url');
+      
+      final response = await http.get(url).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          throw Exception('Connection timeout');
+        },
+      );
+      
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Connection test failed: $e');
+      print('Make sure FastAPI server is running on: $baseUrl');
+      print('Run: cd aqi_prediction_api && python main.py');
+      return false;
+    }
+  }
 
   static Future<CurrentAQIData?> getCurrentAQI({
     double? latitude,
@@ -30,10 +61,20 @@ class AQIApiService {
       final lng = longitude ?? defaultLongitude;
       
       final url = Uri.parse('$baseUrl/live_data?latitude=$lat&longitude=$lng&hours=1');
-      final response = await http.get(url);
+      print('🌐 Fetching current AQI from: $url');
+      
+      final response = await http.get(url).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception('Request timeout');
+        },
+      );
+
+      print('📊 Current AQI response status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print('✅ Current AQI data received successfully');
         
         // Extract current data from the API response
         if (data['data'] != null && (data['data'] as List).isNotEmpty) {
@@ -47,13 +88,16 @@ class AQIApiService {
             no2: (currentData['nitrogen_dioxide'] ?? 0).toDouble(),
             so2: (currentData['sulphur_dioxide'] ?? 0).toDouble(),
             timestamp: DateTime.now().toIso8601String(),
-            location: 'Lat: ${lat.toStringAsFixed(2)}, Lng: ${lng.toStringAsFixed(2)}',
+            location: 'Brasília, Brazil',
           );
         }
+      } else {
+        print('❌ API returned status ${response.statusCode}: ${response.body}');
       }
       return null;
     } catch (e) {
-      print('Error fetching current AQI: $e');
+      print('❌ Error fetching current AQI: $e');
+      print('💡 Make sure FastAPI server is running: cd aqi_prediction_api && python main.py');
       return null;
     }
   }
@@ -68,24 +112,32 @@ class AQIApiService {
       final lng = longitude ?? defaultLongitude;
       
       final url = Uri.parse('$baseUrl/predict_live/$model?latitude=$lat&longitude=$lng&hours=$hours');
-      final response = await http.post(
-        url,
+      print('🔮 Fetching predictions from: $url');
+      
+      final response = await http.post(url, // Changed to POST
         headers: {'Content-Type': 'application/json'},
+      ).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          throw Exception('Prediction request timeout');
+        },
       );
+
+      print('📈 Prediction response status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print('✅ Prediction data received successfully');
         
         if (data['predictions'] != null) {
           final predictions = data['predictions'];
           
-          // The API returns predictions for 8h, 12h, and 24h
-          double aqi8h = 0, aqi12h = 0, aqi24h = 0;
+          // Extract predictions using the correct field names from API response
+          final aqi8h = (predictions['8_hours']?['aqi'] ?? 0).toDouble();
+          final aqi12h = (predictions['12_hours']?['aqi'] ?? 0).toDouble(); 
+          final aqi24h = (predictions['24_hours']?['aqi'] ?? 0).toDouble();
           
-          // Extract the specific hour predictions
-          aqi8h = (predictions['8h_prediction'] ?? 0).toDouble();
-          aqi12h = (predictions['12h_prediction'] ?? 0).toDouble();
-          aqi24h = (predictions['24h_prediction'] ?? 0).toDouble();
+          print('🎯 Predictions: 8h=$aqi8h, 12h=$aqi12h, 24h=$aqi24h');
           
           return PredictionData(
             aqi8h: aqi8h,
@@ -95,10 +147,12 @@ class AQIApiService {
             model: model,
           );
         }
+      } else {
+        print('❌ Prediction API returned status ${response.statusCode}: ${response.body}');
       }
       return null;
     } catch (e) {
-      print('Error fetching predictions: $e');
+      print('❌ Error fetching predictions: $e');
       return null;
     }
   }
@@ -160,7 +214,7 @@ class AQIApiService {
 
   static int getAQIColor(double aqi) {
     if (aqi <= 50) return 0xFF4CAF50; // Green
-    if (aqi <= 100) return 0xFFFFEB3B; // Yellow
+    if (aqi <= 100) return 0xFFFF0000; // Yellow
     if (aqi <= 150) return 0xFFFF9800; // Orange
     if (aqi <= 200) return 0xFFE91E63; // Pink/Red
     if (aqi <= 300) return 0xFF9C27B0; // Purple

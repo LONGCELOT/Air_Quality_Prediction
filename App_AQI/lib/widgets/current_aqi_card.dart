@@ -27,6 +27,7 @@ class CurrentAQICard extends StatelessWidget {
   }
 
   Widget _buildLoadingCard() {
+    // This card is fine as is.
     return Card(
       elevation: AppDimensions.cardElevation,
       shape: RoundedRectangleBorder(
@@ -43,6 +44,7 @@ class CurrentAQICard extends StatelessWidget {
   }
 
   Widget _buildErrorCard(String error) {
+    // This card is fine as is.
     return Card(
       elevation: AppDimensions.cardElevation,
       shape: RoundedRectangleBorder(
@@ -78,28 +80,15 @@ class CurrentAQICard extends StatelessWidget {
     final aqiLevel = provider.getAQILevel(currentAQI.aqi);
     
     return Card(
-      elevation: 8,
+      elevation: AppDimensions.cardElevation,
       shadowColor: aqiColor.withOpacity(0.3),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+        side: BorderSide(color: aqiColor, width: 2),
       ),
+      color: Colors.white,
       child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.white,
-              aqiColor.withOpacity(0.03),
-            ],
-          ),
-          border: Border.all(
-            color: aqiColor.withOpacity(0.2),
-            width: 1,
-          ),
-        ),
+        padding: const EdgeInsets.all(AppDimensions.paddingLarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -116,7 +105,7 @@ class CurrentAQICard extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppDimensions.paddingSmall),
                     Text(
                       'Air Quality Index',
                       style: AppTextStyles.caption.copyWith(
@@ -126,83 +115,57 @@ class CurrentAQICard extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(AppDimensions.paddingSmall),
                   decoration: BoxDecoration(
                     color: aqiColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                   ),
                   child: Icon(
                     Icons.air,
                     color: aqiColor,
-                    size: 32,
+                    size: AppDimensions.iconSizeLarge,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.paddingLarge),
             Center(
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: aqiColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          currentAQI.aqi.toInt().toString(),
-                          style: TextStyle(
-                            fontSize: 56,
-                            fontWeight: FontWeight.bold,
-                            color: aqiColor,
-                            height: 1.0,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'AQI',
-                          style: AppTextStyles.body1.copyWith(
-                            color: aqiColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 8,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingLarge, vertical: AppDimensions.paddingSmall),
                     decoration: BoxDecoration(
                       color: aqiColor,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                       boxShadow: [
                         BoxShadow(
                           color: aqiColor.withOpacity(0.3),
-                          blurRadius: 8,
+                          blurRadius: AppDimensions.cardElevation,
                           offset: const Offset(0, 2),
                         ),
                       ],
                     ),
                     child: Text(
-                      aqiLevel,
+                      'AQI ${currentAQI.aqi.toInt().toString()}',
                       style: AppTextStyles.body1.copyWith(
+                        fontSize: 24,
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.paddingMedium),
+                  Text(
+                    aqiLevel,
+                    style: AppTextStyles.body1.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.paddingLarge),
             Text(
               'Pollutant Levels',
               style: AppTextStyles.headline3.copyWith(
@@ -210,24 +173,24 @@ class CurrentAQICard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.paddingMedium),
             _buildPollutantGrid(currentAQI),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.paddingMedium),
             if (currentAQI.location != null)
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppDimensions.paddingSmall),
                 decoration: BoxDecoration(
-                  color: AppColors.surface.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       Icons.location_on,
-                      size: 16,
+                      size: AppDimensions.iconSizeMedium,
                       color: aqiColor,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppDimensions.paddingSmall),
                     Expanded(
                       child: Text(
                         currentAQI.location!,
@@ -257,71 +220,71 @@ class CurrentAQICard extends StatelessWidget {
       {'name': 'SO₂', 'value': currentAQI.so2, 'unit': 'μg/m³', 'color': Colors.green},
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 2.2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+    return Column(
+      children: [
+        Row(
+          children: List.generate(3, (index) => Expanded(child: _buildPollutantItem(pollutants[index]))),
+        ),
+        const SizedBox(height: AppDimensions.paddingSmall),
+        Row(
+          children: List.generate(3, (index) => Expanded(child: _buildPollutantItem(pollutants[index + 3]))),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPollutantItem(Map<String, dynamic> pollutant) {
+    final color = pollutant['color'] as Color;
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.all(AppDimensions.paddingSmall),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+        border: Border.all(color: color.withOpacity(0.3), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 8.0,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
-      itemCount: pollutants.length,
-      itemBuilder: (context, index) {
-        final pollutant = pollutants[index];
-        final color = pollutant['color'] as Color;
-        
-        return Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withOpacity(0.2), width: 1),
-            boxShadow: [
-              BoxShadow(
-                color: color.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            pollutant['name'] as String,
+            style: AppTextStyles.body2.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                pollutant['name'] as String,
-                style: AppTextStyles.caption.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                '${(pollutant['value'] as double).toStringAsFixed(1)}',
-                style: AppTextStyles.body2.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              Text(
-                pollutant['unit'] as String,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
+          const SizedBox(height: 4.0),
+          Text(
+            '${(pollutant['value'] as double).toStringAsFixed(1)}',
+            style: AppTextStyles.body1.copyWith(
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
           ),
-        );
-      },
+          const SizedBox(height: 4.0),
+          Text(
+            pollutant['unit'] as String,
+            style: AppTextStyles.caption.copyWith(
+              color: AppColors.textSecondary,
+            ),
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

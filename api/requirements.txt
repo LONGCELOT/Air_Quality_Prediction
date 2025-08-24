@@ -1,3 +1,5 @@
+# python_version = "3.11.x"
+
 # FastAPI and ASGI server
 fastapi==0.104.1
 uvicorn==0.24.0

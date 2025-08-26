@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/widget_simple_bg">
+
+    <!-- Progress indicator at top -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+        
+        <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#3F51B5"
+            android:layout_marginEnd="4dp" />
+        
+        <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#4CAF50"
+            android:layout_marginHorizontal="4dp" />
+        
+        <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            android:background="#E0E0E0"
+            android:layout_marginStart="4dp" />
+    </LinearLayout>
+
+    <!-- Forecast sections -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <!-- 8-Hour Forecast -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8-Hour Forecast"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <!-- Leaf icon placeholder -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌿"
+                android:textSize="24sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/aqi_8h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="75"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#4CAF50"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/aqi_8h_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Good"
+                android:textSize="12sp"
+                android:textColor="#4CAF50" />
+
+        </LinearLayout>
+
+        <!-- 12-Hour Forecast -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12-Hour Forecast"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <!-- Cloud icon placeholder -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="☁️"
+                android:textSize="24sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/aqi_12h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="82"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#FF9800"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/aqi_12h_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Moderate"
+                android:textSize="12sp"
+                android:textColor="#FF9800" />
+
+        </LinearLayout>
+
+        <!-- 24-Hour Forecast -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24-Hour Forecast"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/aqi_24h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="90"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="#F44336"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp" />
+
+            <!-- Wind icon placeholder -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💨"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/aqi_24h_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unhealthy"
+                android:textSize="12sp"
+                android:textColor="#F44336" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Current AQI - Hidden but kept for data binding -->
+    <TextView
+        android:id="@+id/current_aqi"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+    
+    <TextView
+        android:id="@+id/current_aqi_level"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+        
+    <TextView
+        android:id="@+id/widget_location"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+</LinearLayout>
